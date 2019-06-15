@@ -33,13 +33,25 @@ namespace Data1
                 double salary = Double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
 
                 Console.WriteLine("Email of people whose salary is more than " + salary.ToString("F2", CultureInfo.InvariantCulture) + ":");
-                var emails = employees.Where(emp => emp.salary > salary).OrderBy(emp => emp.name).Select(emp => emp.email);
+
+                IEnumerable<string> emails =
+                    from emp in employees
+                    where emp.salary > salary
+                    orderby emp.name
+                    select emp.email;
+
                 foreach (string email in emails){
                     Console.WriteLine(email);
                 }
 
-                double sum = employees.Where(emp => emp.name[0] == 'M').Sum(emp => emp.salary);
+                double sum =
+                    (from emp in employees
+                     where emp.name[0] == 'M'
+                     select emp.salary)
+                    .Sum();
+                    
                 Console.WriteLine("Sum of salary of people whose name starts with 'M':" + sum.ToString("F2", CultureInfo.InvariantCulture));
+                Console.ReadLine();
             }
             catch (Exception exception){
                 Console.WriteLine("Error: " + exception.Message);
